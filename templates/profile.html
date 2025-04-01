@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/styles.css') }}">
+</head>
+<body>
+    <header class="dashboard-header">Profile</header>
+
+    <div class="dashboard-container">
+        <h2>Profile Details</h2>
+        
+        {% if message %}
+            <p style="color: green;">{{ message }}</p>
+        {% endif %}
+
+        <form action="{{ url_for('update_profile') }}" method="post">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" value="{{ user_name }}" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="{{ user_email }}" required>
+
+            <button type="submit">Update Profile</button>
+        </form>
+    </div>
+
+    <footer class="dashboard-footer">© 2025 Cricket Shot Detection</footer>
+</body>
+</html>

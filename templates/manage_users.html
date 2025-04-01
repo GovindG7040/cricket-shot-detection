@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Users</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Manage Users</h1>
+        <nav>
+            <a href="/admin/dashboard">Home</a>
+            <a href="/admin/manage_users">Manage Users</a>
+            <a href="/admin/view_messages">View Messages</a>
+            <a href="/admin/model_status">Model Status</a>
+            <a href="/logout">Logout</a>
+        </nav>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="users_list">
+                <!-- User data will be inserted dynamically -->
+            </tbody>
+        </table>
+    </div>
+
+    <script src="/static/manage_users.js"></script>
+</body>
+</html>

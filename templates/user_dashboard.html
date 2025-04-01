@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/styles.css') }}"> <!-- Link to CSS -->
+</head>
+<body class="dashboard-page">  
+
+    <header class="dashboard-header">Cricket Shot Detection Dashboard</header>
+
+    <div class="dashboard-container">
+        <div class="dashboard-content">
+            <h2>Welcome, {{ user_name }}!</h2>  <!-- ✅ Dynamic user name -->
+            <p>Select an option below to proceed:</p>
+            <div class="card-container">
+                <a href="{{ url_for('upload_image') }}" class="card">Upload Image</a>
+                <a href="{{ url_for('view_analysis') }}" class="card">View Analysis</a>
+                <a href="{{ url_for('profile') }}" class="card">Profile</a>
+                <a href="{{ url_for('settings') }}" class="card">Settings</a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="dashboard-footer">© 2025 Cricket Shot Detection</footer>
+
+</body>
+</html>

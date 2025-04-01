@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/styles.css') }}">
+</head>
+<body>
+    <!-- ✅ Navbar -->
+    <header>
+        <h2>Admin Dashboard</h2>
+        <nav>
+            <ul>
+                <li><a href="/admin-dashboard">Home</a></li>
+                <li><a href="/admin/users">Manage Users</a></li>
+                <li><a href="/admin/messages">View Messages</a></li>
+                <li><a href="/admin/model">Model Status</a></li>
+                <li>
+                    <form action="/admin/logout" method="post">
+                        <button type="submit" class="logout-btn">Logout</button>
+                    </form>
+                    
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ✅ Dashboard Cards -->
+    <div class="dashboard-container">
+        <div class="card">
+            <h3>Total Users</h3>
+            <p id="total-users">Loading...</p>
+        </div>
+        <div class="card">
+            <h3>Model Accuracy</h3>
+            <p id="model-accuracy">Loading...</p>
+        </div>
+        <div class="card">
+            <h3>Total Predictions</h3>
+            <p id="total-predictions">Loading...</p>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', path='/js/admin_dashboard.js') }}"></script>
+</body>
+</html>

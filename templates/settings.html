@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='css/styles.css') }}">
+</head>
+<body>
+    <h1>Settings</h1>
+
+    <h2>Account</h2>
+    <ul>
+        <li><a href="/profile">Edit Profile</a></li>
+        <li><a href="/history">View History</a></li>
+        <li><a href="/terms-conditions">Terms & Conditions</a></li>
+        <li><a href="/account-deletion">Delete Account</a></li>
+        <li><a href="/logout">Logout</a></li>  <!-- Added Logout Link -->
+    </ul>
+
+    <h2>Change Password</h2>
+    <form action="/settings/change-password" method="post">
+        <label for="new_password">New Password:</label>
+        <input type="password" id="new_password" name="new_password" required>
+        <button type="submit">Update Password</button>
+    </form>
+
+    <a href="/">Back to Home</a>
+</body>
+</html>

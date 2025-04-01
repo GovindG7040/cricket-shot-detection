@@ -1,0 +1,271 @@
+/* General Styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    color: white;
+    text-align: center;
+    background-size: cover;
+    background-position: center;
+    animation: changeBackground 12s infinite linear;
+}
+
+/* Background Slideshow for Home Page */
+@keyframes changeBackground {
+    0% { background-image: url('../images/cricket1.jpg'); }
+    33% { background-image: url('../images/cricket2.jpg'); }
+    66% { background-image: url('../images/cricket3.jpg'); }
+    100% { background-image: url('../images/cricket1.jpg'); }
+}
+
+/* Top Right Navigation */
+.top-right-nav {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+}
+
+.top-right-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.top-right-nav ul li {
+    display: inline;
+    margin-left: 20px;
+}
+
+.top-right-nav ul li a {
+    text-decoration: none;
+    color: white;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+/* Centered Content */
+.center-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Fully centers the content */
+}
+
+/* Home Page Title */
+.center-content h1 {
+    font-size: 3em; /* Increased font size */
+    font-weight: bold;
+}
+
+/* Forms (Login, Register, Contact) */
+.form-container {
+    width: 350px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.form-container h2 {
+    font-size: 2em; /* Increased font size */
+    margin-bottom: 10px;
+}
+
+.form-group {
+    text-align: left;
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    font-size: 1.2em; /* Increased label font size */
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    font-size: 1.1em;
+    border-radius: 5px;
+    border: none;
+}
+
+/* About Page */
+.about-container {
+    max-width: 80%;
+    margin: auto;
+    text-align: center;
+}
+
+.about-container h2 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+}
+
+.about-container p {
+    font-size: 1.3em;
+}
+
+/* Contact Page */
+.contact-container {
+    max-width: 400px;
+    margin: auto;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.contact-container h2 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+/* Register/Login Redirection Links */
+.redirect-link {
+    margin-top: 15px;
+    font-size: 1.1em;
+}
+
+.redirect-link a {
+    color: #ffcc00;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.redirect-link a:hover {
+    text-decoration: underline;
+}
+
+/* Form Container Centering */
+.form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+}
+
+.form-container h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.form-container form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.form-container label {
+    font-size: 1.2em;
+    margin-top: 10px;
+    text-align: left;
+    width: 100%;
+}
+
+.form-container input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    font-size: 1em;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.form-container button {
+    width: 100%;
+    padding: 10px;
+    font-size: 1.2em;
+    margin-top: 15px;
+    background-color: #ffcc00;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.form-container button:hover {
+    background-color: #ff9900;
+}
+
+/* ✅ Dashboard Specific Styles */
+.dashboard-page {
+    background-image: url('../images/cricket4.jpg'); 
+ /* Set a new background */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: white; /* Ensure text is readable */
+}
+
+/* Dashboard Layout */
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    padding: 20px;
+}
+
+/* Stylish Header */
+.dashboard-header {
+    width: 100%;
+    padding: 15px;
+    text-align: center;
+    font-size: 2em;
+    font-weight: bold;
+    background: rgba(0, 0, 0, 0.7);
+    color: #ffcc00;
+    position: fixed;
+    top: 0;
+}
+
+/* Prevent content from being hidden behind header */
+.dashboard-content {
+    margin-top: 100px; /* Adjusted to prevent overlap with fixed header */
+    width: 80%;
+    text-align: center;
+}
+
+/* Card Grid */
+.card-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+/* Individual Cards */
+.card {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 220px;
+    transition: 0.3s;
+    color: white;
+    font-size: 1.2em;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.card:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
+}
+
+/* Footer */
+.dashboard-footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+}
