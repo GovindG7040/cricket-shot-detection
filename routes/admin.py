@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Request, HTTPException, Depends
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, RedirectResponse
-from database import get_user_collection, get_logs_collection
+from database import get_user_collection, get_logs_collection, get_prediction_logs_collection
 from routes.auth import get_current_user
 from bson.objectid import ObjectId
 from utils.logger import log_action
@@ -56,8 +56,17 @@ async def delete_user(request: Request, user_id: str, admin=Depends(admin_requir
 @router.get("/logs", response_class=HTMLResponse)
 async def view_logs(request: Request, user=Depends(admin_required)):
     logs_collection = get_logs_collection()
+    prediction_logs_collection = get_prediction_logs_collection()
+
     logs = await logs_collection.find().sort("timestamp", -1).to_list(100)
-    return templates.TemplateResponse("admin_logs.html", {"request": request, "logs": logs})
+    prediction_logs = await prediction_logs_collection.find().sort("timestamp", -1).to_list(100)
+
+    return templates.TemplateResponse("admin_logs.html", {
+        "request": request,
+        "logs": logs,
+        "prediction_logs": prediction_logs
+    })
+
 
 # ✅ Admin Logout
 @router.get("/logout")

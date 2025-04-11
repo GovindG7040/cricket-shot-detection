@@ -69,7 +69,7 @@ async def upload_page(request: Request):
 
 # ✅ File Upload API
 @app.post("/upload/")
-async def upload_file(file: UploadFile = File(...)):
+async def upload_file(request: Request, file: UploadFile = File(...)):
     file_location = os.path.join(UPLOAD_DIR, file.filename)
     os.makedirs(UPLOAD_DIR, exist_ok=True)
 
@@ -78,8 +78,8 @@ async def upload_file(file: UploadFile = File(...)):
 
     print(f"📸 File uploaded successfully! filename: {file.filename}")
 
-    # ✅ Call prediction logic after saving
-    prediction = predict_image(file_location)
+    # ✅ Call prediction logic with request
+    prediction = await predict_image(file_location, request)
     print(f"🎯 Prediction: {prediction}")
 
     # ✅ Save prediction result for analysis page

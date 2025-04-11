@@ -20,3 +20,6 @@ def get_user_collection():
 
 def get_logs_collection():
     return db["logs"]  # or whatever your logs collection is named
+
+def get_prediction_logs_collection():
+    return db["prediction_logs"]

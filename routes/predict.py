@@ -5,6 +5,10 @@ from detectron2.engine import DefaultPredictor
 from detectron2.config import get_cfg
 from detectron2 import model_zoo
 from services.model_service import predict_shot  # Use model loading from this service
+from database import get_prediction_logs_collection
+from datetime import datetime
+from routes.auth import get_current_user  # You’ll need this if using user info
+import os
 
 # ---------- Config Detectron2 ----------
 cfg = get_cfg()
@@ -48,21 +52,32 @@ def extract_keypoints(image_path):
     return flattened[:34]
 
 # ---------- Predict Shot ----------
-def predict_image(image_path):
+async def predict_image(image_path, request):
     keypoints = extract_keypoints(image_path)
     if not keypoints:
         return "❌ No valid keypoints found in image."
 
-    # ✅ Scale with fixed dimensions (same as training)
     scaled = []
     for i in range(0, len(keypoints), 2):
         x = keypoints[i] / FIXED_WIDTH
         y = keypoints[i + 1] / FIXED_HEIGHT
         scaled.extend([x, y])
 
-    # ✅ Normalize to [-1, 1]
     normalized = [(val - 0.5) * 2 for val in scaled]
+    predicted_label = predict_shot([normalized])
+    print(f"🎯 Prediction: {predicted_label}")
 
-    # ✅ Predict using the model
-    result = predict_shot([normalized])
-    return result
+    # ✅ Log prediction (without confidence)
+    user = await get_current_user(request)
+    user_email = user["email"] if user and "email" in user else "unknown"
+    logs_collection = get_prediction_logs_collection()
+
+    await logs_collection.insert_one({
+    "user_email": user_email,
+    "image_name": os.path.basename(image_path),
+    "predicted_shot": predicted_label,
+    "timestamp": datetime.utcnow()
+})
+
+
+    return predicted_label

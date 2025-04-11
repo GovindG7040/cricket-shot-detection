@@ -4,14 +4,16 @@
 <head>
     <title>Admin Logs</title>
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; }
+        body { font-family: Arial, sans-serif; padding: 20px; background-color: #f9f9f9; }
+        h2 { margin-top: 40px; }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         th, td { padding: 10px; border: 1px solid #ccc; text-align: left; }
         th { background-color: #f4f4f4; }
     </style>
 </head>
 <body>
-    <h2>Admin Logs</h2>
+
+    <h2>🛠 Admin Actions</h2>
     {% if logs %}
     <table>
         <tr>
@@ -28,7 +30,32 @@
         {% endfor %}
     </table>
     {% else %}
-        <p>No logs available.</p>
+        <p>No admin logs available.</p>
     {% endif %}
+
+    <h2>📸 Prediction Logs</h2>
+    {% if prediction_logs %}
+    <table>
+        <tr>
+            <th>User</th>
+            <th>Image Name</th>
+            <th>Prediction</th>
+            
+            <th>Timestamp (UTC)</th>
+        </tr>
+        {% for p in prediction_logs %}
+        <tr>
+            <td>{{ p.user_email }}</td>
+            <td>{{ p.image_name }}</td>
+            <td>{{ p.predicted_shot }}</td>
+            
+            <td>{{ p.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+        <p>No prediction logs available.</p>
+    {% endif %}
+
 </body>
 </html>
