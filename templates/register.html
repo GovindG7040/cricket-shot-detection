@@ -27,39 +27,42 @@
     </div>
 
     <script>
-    document.getElementById("registerForm").addEventListener("submit", async function(event) {
-        event.preventDefault();  // Prevent default form submission
-
-        // Get form values
-        const formData = new FormData();
-        formData.append("name", document.getElementById("name").value);
-        formData.append("email", document.getElementById("email").value);
-        formData.append("password", document.getElementById("password").value);
-
-        try {
-            const response = await fetch("/auth/register", {  // Ensure this endpoint is correct
-                method: "POST",
-                body: formData,
-                headers: {
-                    "Accept": "application/json"
+        document.getElementById("registerForm").addEventListener("submit", async function(event) {
+            event.preventDefault();  // Prevent default form submission
+        
+            // Get form values as JSON
+            const formData = {
+                name: document.getElementById("name").value,
+                email: document.getElementById("email").value,
+                password: document.getElementById("password").value
+            };
+        
+            try {
+                const response = await fetch("/auth/register", {  // Ensure this endpoint is correct
+                    method: "POST",
+                    body: JSON.stringify(formData),
+                    headers: {
+                        "Content-Type": "application/json",  // Ensure FastAPI recognizes it as JSON
+                        "Accept": "application/json"
+                    }
+                });
+        
+                const data = await response.json();
+        
+                if (response.ok) {
+                    alert("Registration successful!");
+                    window.location.href = "/login";  // Redirect to login page
+                } else if (response.status === 400) {
+                    alert("Validation error: " + data.detail);
+                } else {
+                    alert("Error: " + data.detail);
                 }
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                alert("Registration successful!");
-                window.location.href = "/login";  // Redirect to login page
-            } else if (response.status === 400) {
-                alert("Validation error: " + data.detail);
-            } else {
-                alert("Error: " + data.detail);
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Something went wrong. Please try again.");
             }
-        } catch (error) {
-            console.error("Error:", error);
-            alert("Something went wrong. Please try again.");
-        }
-    });
+        });
+        
 </script>
 
 </body>

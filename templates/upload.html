@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Image</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+            background-color: #f8f9fa;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+        }
+
+        input[type="file"] {
+            margin-bottom: 10px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        img {
+            margin-top: 15px;
+            border: 2px solid #ddd;
+            padding: 5px;
+            border-radius: 5px;
+            max-width: 300px;
+            display: none;
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 15px;
+            color: #007bff;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <script>
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById("imagePreview").src = e.target.result;
+                    document.getElementById("imagePreview").style.display = "block";
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function redirectToDashboard() {
+            alert("Image uploaded successfully! Redirecting to dashboard...");
+            window.location.href = "/dashboard"; // Redirect after upload
+        }
+    </script>
+</head>
+<body>
+    <h2>📤 Upload an Image</h2>
+    <form action="/upload/" method="post" enctype="multipart/form-data" onsubmit="redirectToDashboard()">
+        <input type="file" name="file" accept="image/*" required onchange="previewImage(event)">
+        <br><br>
+        <button type="submit">📤 Upload Image</button>
+    </form>
+    <br>
+    <img id="imagePreview" src="" alt="Image Preview">
+
+    <br><br>
+    <a href="/dashboard" class="back-link">🔙 Back to Dashboard</a>
+</body>
+</html>

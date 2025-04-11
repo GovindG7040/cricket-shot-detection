@@ -1,0 +1,40 @@
+<!-- templates/analysis.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Analysis Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='css/styles.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            padding-top: 60px;
+        }
+        h2 {
+            color: #333;
+        }
+        p {
+            font-size: 24px;
+            color: red;
+            font-weight: bold;
+        }
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            font-size: 18px;
+            text-decoration: none;
+            color: #007bff;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h2>📊 Predicted Shot Analysis</h2>
+    <p>🎯 <strong>{{ result }}</strong></p>
+    <a href="/dashboard">← Back to Dashboard</a>
+</body>
+</html>
