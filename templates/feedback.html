@@ -1,0 +1,24 @@
+<!-- templates/feedback.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Submit Feedback</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Cricket Shot Detection</h1>
+    </header>
+
+    <div class="container">
+        <h2>Feedback</h2>
+        <p>We value your input! Let us know what you think about the system.</p>
+
+        <form action="/submit-feedback" method="post">
+            <textarea name="message" rows="6" cols="60" required placeholder="Write your feedback here..."></textarea><br><br>
+            <button type="submit">Submit Feedback</button>
+        </form>
+    </div>
+</body>
+</html>

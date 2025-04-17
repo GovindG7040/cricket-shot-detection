@@ -5,6 +5,7 @@ from database import get_user_collection, get_logs_collection, get_prediction_lo
 from routes.auth import get_current_user
 from bson.objectid import ObjectId
 from utils.logger import log_action
+from database import get_feedback_collection
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
@@ -75,3 +76,12 @@ async def logout():
     response.delete_cookie("access_token")
     return response
 
+@router.get("/feedbacks", response_class=HTMLResponse)
+async def view_feedbacks(request: Request, user=Depends(admin_required)):
+    feedback_collection = get_feedback_collection()
+    feedbacks = await feedback_collection.find().sort("timestamp", -1).to_list(100)
+
+    return templates.TemplateResponse("admin_feedbacks.html", {
+        "request": request,
+        "feedbacks": feedbacks
+    })

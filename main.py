@@ -1,4 +1,4 @@
-from fastapi import FastAPI, File, UploadFile, Form, Request
+from fastapi import FastAPI, File, UploadFile, Form, Request, Depends
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
@@ -7,9 +7,11 @@ from routes.admin import router as admin_router  # ✅ Import admin router
 from routes.predict import predict_image
 import shutil
 import os
+from database import get_feedback_collection
+from routes.auth import get_current_user  # ✅ This should decode the JWT
+from datetime import datetime
 
 app = FastAPI()
-
 
 # ✅ Mount static files for CSS, JS, images
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -24,7 +26,6 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 # ✅ Include authentication routes
 app.include_router(auth_router, prefix="/auth", tags=["auth"])  
 app.include_router(admin_router, prefix="/admin", tags=["admin"])
-  # ✅ Add prefix for admin routes
 
 # ✅ Home Page
 @app.get("/", response_class=HTMLResponse)
@@ -46,6 +47,7 @@ async def about_page(request: Request):
 async def dashboard(request: Request):
     return templates.TemplateResponse("dashboard.html", {"request": request})
 
+# ✅ Analysis Page
 @app.get("/analysis", response_class=HTMLResponse)
 async def analysis_page(request: Request):
     try:
@@ -78,13 +80,35 @@ async def upload_file(request: Request, file: UploadFile = File(...)):
 
     print(f"📸 File uploaded successfully! filename: {file.filename}")
 
-    # ✅ Call prediction logic with request
     prediction = await predict_image(file_location, request)
     print(f"🎯 Prediction: {prediction}")
 
-    # ✅ Save prediction result for analysis page
     with open("latest_prediction.txt", "w") as f:
         f.write(prediction)
 
-    # ✅ Redirect to analysis page
     return RedirectResponse(url="/analysis", status_code=303)
+
+# ✅ Feedback Page
+@app.get("/feedback", response_class=HTMLResponse)
+async def feedback_page(request: Request):
+    return templates.TemplateResponse("feedback.html", {"request": request})
+
+# ✅ Feedback Submission — FIXED ✅
+@app.post("/submit-feedback")
+async def submit_feedback(
+    request: Request,
+    current_user: dict = Depends(get_current_user)
+):
+    form = await request.form()
+    message = form.get("message")
+
+    user_email = current_user.get("email") if current_user else "Anonymous"
+
+    collection = get_feedback_collection()
+    await collection.insert_one({
+        "user": user_email,
+        "message": message,
+        "timestamp": datetime.utcnow()
+    })
+
+    return RedirectResponse(url="/dashboard", status_code=303)

@@ -23,3 +23,8 @@ def get_logs_collection():
 
 def get_prediction_logs_collection():
     return db["prediction_logs"]
+
+def get_feedback_collection():
+    return db["feedbacks"]
+
+
