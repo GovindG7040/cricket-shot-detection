@@ -11,15 +11,25 @@
             settingsMenu.style.display = settingsMenu.style.display === "none" ? "block" : "none";
         }
 
-        function toggleResponse() {
-            const response = document.getElementById("admin-response");
-            const button = document.getElementById("view-response-btn");
-            if (response.style.display === "none") {
-                response.style.display = "block";
-                button.textContent = "Hide Response";
-            } else {
-                response.style.display = "none";
-                button.textContent = "📩 View Feedback Response";
+        async function fetchAdminResponse() {
+            try {
+                const res = await fetch('/api/feedback/response', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                    }
+                });
+                const data = await res.json();
+                const responseBox = document.getElementById("admin-response");
+                const responseText = document.getElementById("response-text");
+
+                if (data.response) {
+                    responseText.innerText = data.response;
+                } else {
+                    responseText.innerText = "No response from admin yet.";
+                }
+                responseBox.style.display = 'block';
+            } catch (err) {
+                alert("Error fetching admin response. Make sure you're logged in.");
             }
         }
     </script>
@@ -82,7 +92,8 @@
             display: none;
             margin-top: 20px;
             padding: 15px;
-            background-color:blue;
+            background-color: blue;
+            color: white;
             border-radius: 5px;
             max-width: 600px;
             margin-left: auto;
@@ -98,6 +109,7 @@
         <a href="/analysis" class="btn">📊 View Analysis</a>
         <a href="/feedback" class="btn">✍️ Submit Feedback</a>
 
+        <!-- ⚙️ Settings -->
         <div class="settings-container">
             <button class="btn" onclick="toggleSettings()">⚙️ Settings</button>
             <div class="settings-menu" id="settings-menu">
@@ -106,22 +118,12 @@
             </div>
         </div>
 
-        {% if feedback %}
-            <div style="margin-top: 30px;">
-                <h3>Your Submitted Feedback:</h3>
-                <p>{{ feedback.message }}</p>
-
-                {% if feedback.response %}
-                    <button id="view-response-btn" class="btn" onclick="toggleResponse()">📩 View Feedback Response</button>
-                    <div id="admin-response">
-                        <h4>Admin Response:</h4>
-                        <p>{{ feedback.response }}</p>
-                    </div>
-                {% else %}
-                    <p><em>No response from admin yet.</em></p>
-                {% endif %}
-            </div>
-        {% endif %}
+        <!-- 📩 View Feedback Response -->
+        <button class="btn" onclick="fetchAdminResponse()">📩 View Feedback Response</button>
+        <div id="admin-response">
+            <strong>Admin Response:</strong>
+            <p id="response-text" style="margin-top: 10px;"></p>
+        </div>
 
         <a href="/auth/logout" class="btn" style="background-color: red;">🚪 Logout</a>
     </div>

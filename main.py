@@ -1,4 +1,4 @@
-from fastapi import FastAPI, File, UploadFile, Form, Request, Depends
+from fastapi import FastAPI, File, UploadFile, Form, Request, Depends, HTTPException
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
@@ -7,9 +7,11 @@ from routes.admin import router as admin_router  # ✅ Import admin router
 from routes.predict import predict_image
 import shutil
 import os
+import json
 from database import get_feedback_collection
 from routes.auth import get_current_user  # ✅ This should decode the JWT
 from datetime import datetime
+from routes.feedback import router as feedback_router
 from bson.objectid import ObjectId
 app = FastAPI()
 
@@ -26,6 +28,7 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 # ✅ Include authentication routes
 app.include_router(auth_router, prefix="/auth", tags=["auth"])  
 app.include_router(admin_router, prefix="/admin", tags=["admin"])
+app.include_router(feedback_router, tags=["feedback"])
 
 # ✅ Home Page
 @app.get("/", response_class=HTMLResponse)
@@ -48,25 +51,35 @@ async def dashboard(request: Request, current_user: dict = Depends(get_current_u
     user_email = current_user.get("email")
 
     feedbacks_collection = get_feedback_collection()
-    feedback = await feedbacks_collection.find_one({"user": user_email})
+    feedback_cursor = feedbacks_collection.find({"user": user_email})
+    feedbacks = await feedback_cursor.to_list(length=100)  # or any upper limit
 
-    print("Feedback for user dashboard:", feedback)  # for debugging
+
+    print("Feedback for user dashboard:", feedbacks)  # for debugging
 
     return templates.TemplateResponse("dashboard.html", {
-        "request": request,
-        "feedback": feedback
-    })
+    "request": request,
+    "feedbacks": feedbacks
+})
+
 
 # ✅ Analysis Page
 @app.get("/analysis", response_class=HTMLResponse)
 async def analysis_page(request: Request):
     try:
-        with open("latest_prediction.txt", "r") as f:
-            result = f.read()
-    except FileNotFoundError:
-        result = "No analysis available. Please upload an image first."
+        with open("latest_prediction.json", "r") as f:
+            result = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        result = {
+            "predicted_shot": "❌ No analysis available.",
+            "description": []
+        }
 
-    return templates.TemplateResponse("analysis.html", {"request": request, "result": result})
+    return templates.TemplateResponse("analysis.html", {
+        "request": request,
+        "predicted_shot": result["predicted_shot"],
+        "description": result["description"]
+    })
 
 # ✅ Contact Form Submission
 @app.post("/contact", response_class=HTMLResponse)
@@ -93,8 +106,9 @@ async def upload_file(request: Request, file: UploadFile = File(...)):
     prediction = await predict_image(file_location, request)
     print(f"🎯 Prediction: {prediction}")
 
-    with open("latest_prediction.txt", "w") as f:
-        f.write(prediction)
+    # Save full prediction as JSON
+    with open("latest_prediction.json", "w") as f:
+        json.dump(prediction, f)
 
     return RedirectResponse(url="/analysis", status_code=303)
 

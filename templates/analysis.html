@@ -14,27 +14,73 @@
         }
         h2 {
             color: #333;
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: inline-block;
         }
         p {
             font-size: 24px;
-            color: red;
+            color: #e63946;
             font-weight: bold;
+            background-color: #fff;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: inline-block;
+        }
+        ul {
+            list-style-type: none;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 600px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        li {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 12px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            text-align: left;
         }
         a {
             display: inline-block;
-            margin-top: 20px;
+            margin-top: 30px;
             font-size: 18px;
             text-decoration: none;
             color: #007bff;
+            background-color: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
         }
         a:hover {
-            text-decoration: underline;
+            text-decoration: none;
+            background-color: #007bff;
+            color: #fff;
         }
     </style>
 </head>
 <body>
     <h2>📊 Predicted Shot Analysis</h2>
-    <p>🎯 <strong>{{ result }}</strong></p>
+    <p>🎯 <strong>{{ predicted_shot }}</strong></p>
+
+    {% if description %}
+        <ul>
+            {% for point in description %}
+                <li>👉 {{ point }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No description available.</p>
+    {% endif %}
+
     <a href="/dashboard">← Back to Dashboard</a>
 </body>
 </html>
