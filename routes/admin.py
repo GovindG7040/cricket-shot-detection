@@ -6,6 +6,8 @@ from routes.auth import get_current_user
 from bson.objectid import ObjectId
 from utils.logger import log_action
 from database import get_feedback_collection
+from datetime import datetime
+from fastapi import Form
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
@@ -85,3 +87,15 @@ async def view_feedbacks(request: Request, user=Depends(admin_required)):
         "request": request,
         "feedbacks": feedbacks
     })
+
+@router.post("/feedbacks/respond/{feedback_id}")
+async def respond_to_feedback(request: Request, feedback_id: str, admin_response: str = Form(...)):
+    collection = get_feedback_collection()
+    await collection.update_one(
+        {"_id": ObjectId(feedback_id)},
+        {"$set": {
+            "response": admin_response,
+            "response_timestamp": datetime.utcnow()
+        }}
+    )
+    return RedirectResponse(url="/admin/feedbacks", status_code=303)

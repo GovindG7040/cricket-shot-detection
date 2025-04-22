@@ -15,7 +15,6 @@
             padding: 0;
         }
         h1 {
-            color: #333;
             text-align: center;
             padding: 20px;
             background-color: #007BFF;
@@ -31,21 +30,15 @@
         }
         th, td {
             padding: 10px;
-            text-align: left;
             border: 1px solid #ddd;
+            vertical-align: top;
         }
         th {
             background-color: #007BFF;
             color: white;
         }
-        td {
-            background-color: #fff;
-        }
         tr:nth-child(even) td {
             background-color: #f9f9f9;
-        }
-        td {
-            color: #555;
         }
         .timestamp {
             color: #888;
@@ -54,6 +47,25 @@
         .user {
             font-weight: bold;
             color: #007BFF;
+        }
+        .response-form textarea {
+            width: 100%;
+            height: 60px;
+            resize: vertical;
+        }
+        .response-form button {
+            margin-top: 8px;
+            padding: 6px 12px;
+            background-color: #28a745;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+        .admin-response {
+            margin-top: 10px;
+            padding: 8px;
+            background-color: #e8f5e9;
+            border-left: 4px solid #28a745;
         }
     </style>
 </head>
@@ -70,7 +82,7 @@
             <thead>
                 <tr>
                     <th>User</th>
-                    <th>Feedback Message</th>
+                    <th>Feedback & Response</th>
                     <th>Timestamp</th>
                 </tr>
             </thead>
@@ -78,7 +90,21 @@
                 {% for feedback in feedbacks %}
                     <tr>
                         <td class="user">{{ feedback.user if feedback.user else "Anonymous" }}</td>
-                        <td>{{ feedback.message }}</td>
+                        <td>
+                            <div><strong>Message:</strong> {{ feedback.message }}</div>
+                            {% if feedback.response %}
+                                <div class="admin-response"><strong>Admin Response:</strong> {{ feedback.response }}</div>
+                            {% else %}
+                                <!-- Response Form -->
+                                <form class="response-form" action="/admin/feedbacks/respond/{{ feedback._id }}" method="post">
+
+                                    <input type="hidden" name="feedback_id" value="{{ feedback._id }}">
+                                    <textarea name="admin_response" required placeholder="Write your response..."></textarea>
+
+                                    <button type="submit">Submit Response</button>
+                                </form>
+                            {% endif %}
+                        </td>
                         <td class="timestamp">{{ feedback.timestamp }}</td>
                     </tr>
                 {% endfor %}

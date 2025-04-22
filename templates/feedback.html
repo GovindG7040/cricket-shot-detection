@@ -15,10 +15,29 @@
         <h2>Feedback</h2>
         <p>We value your input! Let us know what you think about the system.</p>
 
+        <!-- Feedback Submission Form -->
         <form action="/submit-feedback" method="post">
             <textarea name="message" rows="6" cols="60" required placeholder="Write your feedback here..."></textarea><br><br>
             <button type="submit">Submit Feedback</button>
         </form>
+
+        <!-- Display Feedback with Admin Response (if any) -->
+        {% if feedback %}
+            <hr>
+            <div class="user-feedback">
+                <h3>Your Submitted Feedback:</h3>
+                <p>{{ feedback.message }}</p>
+
+                {% if feedback.response %}
+                    <div class="admin-response">
+                        <h4>Admin Response:</h4>
+                        <p>{{ feedback.response }}</p>
+                    </div>
+                {% else %}
+                    <p><em>No response from admin yet.</em></p>
+                {% endif %}
+            </div>
+        {% endif %}
     </div>
 </body>
 </html>

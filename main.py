@@ -10,7 +10,7 @@ import os
 from database import get_feedback_collection
 from routes.auth import get_current_user  # ✅ This should decode the JWT
 from datetime import datetime
-
+from bson.objectid import ObjectId
 app = FastAPI()
 
 # ✅ Mount static files for CSS, JS, images
@@ -44,8 +44,18 @@ async def about_page(request: Request):
 
 # ✅ Dashboard Page
 @app.get("/dashboard", response_class=HTMLResponse)
-async def dashboard(request: Request):
-    return templates.TemplateResponse("dashboard.html", {"request": request})
+async def dashboard(request: Request, current_user: dict = Depends(get_current_user)):
+    user_email = current_user.get("email")
+
+    feedbacks_collection = get_feedback_collection()
+    feedback = await feedbacks_collection.find_one({"user": user_email})
+
+    print("Feedback for user dashboard:", feedback)  # for debugging
+
+    return templates.TemplateResponse("dashboard.html", {
+        "request": request,
+        "feedback": feedback
+    })
 
 # ✅ Analysis Page
 @app.get("/analysis", response_class=HTMLResponse)
@@ -103,6 +113,9 @@ async def submit_feedback(
     message = form.get("message")
 
     user_email = current_user.get("email") if current_user else "Anonymous"
+    if current_user is None:
+        raise HTTPException(status_code=401, detail="Login required to submit feedback")
+
 
     collection = get_feedback_collection()
     await collection.insert_one({
@@ -112,3 +125,4 @@ async def submit_feedback(
     })
 
     return RedirectResponse(url="/dashboard", status_code=303)
+

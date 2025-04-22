@@ -4,11 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Dashboard</title>
-    <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}"> <!-- Link to your CSS file -->
+    <link rel="stylesheet" href="{{ url_for('static', path='css/styles.css') }}">
     <script>
         function toggleSettings() {
-            var settingsMenu = document.getElementById("settings-menu");
+            const settingsMenu = document.getElementById("settings-menu");
             settingsMenu.style.display = settingsMenu.style.display === "none" ? "block" : "none";
+        }
+
+        function toggleResponse() {
+            const response = document.getElementById("admin-response");
+            const button = document.getElementById("view-response-btn");
+            if (response.style.display === "none") {
+                response.style.display = "block";
+                button.textContent = "Hide Response";
+            } else {
+                response.style.display = "none";
+                button.textContent = "📩 View Feedback Response";
+            }
         }
     </script>
     <style>
@@ -27,7 +39,7 @@
         }
         .btn {
             display: block;
-            width: 200px;
+            width: 220px;
             padding: 10px;
             margin: 10px auto;
             border: none;
@@ -66,20 +78,26 @@
         .settings-menu a:hover {
             background-color: #f1f1f1;
         }
+        #admin-response {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background-color:blue;
+            border-radius: 5px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
     </style>
 </head>
 <body>
-
     <div class="container">
         <h1>Welcome to Your Dashboard</h1>
 
-        <!-- Upload Image Button -->
         <a href="/upload" class="btn">📤 Upload Image</a>
-
-        <!-- View Analysis Button -->
         <a href="/analysis" class="btn">📊 View Analysis</a>
         <a href="/feedback" class="btn">✍️ Submit Feedback</a>
-        <!-- Settings Dropdown -->
+
         <div class="settings-container">
             <button class="btn" onclick="toggleSettings()">⚙️ Settings</button>
             <div class="settings-menu" id="settings-menu">
@@ -88,9 +106,24 @@
             </div>
         </div>
 
-        <!-- Logout Button -->
+        {% if feedback %}
+            <div style="margin-top: 30px;">
+                <h3>Your Submitted Feedback:</h3>
+                <p>{{ feedback.message }}</p>
+
+                {% if feedback.response %}
+                    <button id="view-response-btn" class="btn" onclick="toggleResponse()">📩 View Feedback Response</button>
+                    <div id="admin-response">
+                        <h4>Admin Response:</h4>
+                        <p>{{ feedback.response }}</p>
+                    </div>
+                {% else %}
+                    <p><em>No response from admin yet.</em></p>
+                {% endif %}
+            </div>
+        {% endif %}
+
         <a href="/auth/logout" class="btn" style="background-color: red;">🚪 Logout</a>
     </div>
-
 </body>
 </html>
